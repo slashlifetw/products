@@ -1,11 +1,9 @@
 import os # operating system
 
 # 讀取檔案
-products = [] 
-if os.path.isfile('products.csv'): # 檢查檔案在不再
-    print('yeah! 找到檔案了!')
-    # 讀取檔案
-    with open('products.csv', 'r') as f:
+def read_file(filename):
+    products = [] 
+    with open(filename, 'r') as f:
         for line in f:
             if '商品,價格' in line:
                 continue
@@ -18,11 +16,10 @@ if os.path.isfile('products.csv'): # 檢查檔案在不再
             # split=切割，我們是用','去區分'商品'及'價格' 所以用','下去當切割線
             # print(s)
             products.append([name, price])
-    print(products)
-
-else:
-    print('找不到檔案.....')
-    # 讓使用者輸入
+    return products
+    
+# 讓使用者輸入
+def user_input(products):
     while True:
         name = input('請輸入商品名稱: ')
         if name == 'q':
@@ -38,14 +35,32 @@ else:
         # 上面兩行可以合併成下面一行
         products.append([name, price])
     print(products)
+    return products
 
 # 印出所有購買紀錄
-for p in products:
-    print(p[0], '的價格是', p[1])
+def print_products(products):
+    for p in products:
+        print(p[0], '的價格是', p[1])
 
 # 寫入檔案
-with open('products.csv', 'w') as f:
-    f.write('商品,價格\n')
-    for p in products:
-        f.write(p[0] + ',' + str(p[1]) + '\n')
-        #第7行把price轉換成整數，做加法時要使用相同格式，所以要把整數轉乘Stringa,str()
+def write_file(filename, products):
+    with open(filename, 'w') as f:
+        f.write('商品,價格\n')
+        for p in products:
+            f.write(p[0] + ',' + str(p[1]) + '\n')
+            #第7行把price轉換成整數，做加法時要使用相同格式，所以要把整數轉乘Stringa,str()
+
+def main():
+    filename = 'products.csv'
+    if os.path.isfile(filename): # 檢查檔案在不再
+        print('yeah! 找到檔案了!')
+        products = read_file(filename)
+    else:
+        print('找不到檔案.....')
+    products = user_input(products)
+    print_products(products)
+    write_file(filename, products)
+
+main()
+
+# 把程式改寫成function在程式裡有專有名詞「refector(程式重構)」
